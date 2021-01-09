@@ -32,7 +32,7 @@
 #define CLOCK_REALTIME 0
 #endif
 
-#if defined(__MACH__)
+#if defined(__MACH__) && 0
 #include <mach/mach.h>
 #include <mach/clock.h>
 

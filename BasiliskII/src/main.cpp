@@ -105,7 +105,7 @@ bool InitAll(const char *vmdir)
 	// Load XPRAM default values if signature not found
 	if (XPRAM[0x0c] != 0x4e || XPRAM[0x0d] != 0x75
 	 || XPRAM[0x0e] != 0x4d || XPRAM[0x0f] != 0x63) {
-		D(bug("Loading XPRAM default values\n"));
+	  D(bug("Loading XPRAM default values\n"));
 		memset(XPRAM, 0, 0x100);
 		XPRAM[0x0c] = 0x4e;	// "NuMc" signature
 		XPRAM[0x0d] = 0x75;

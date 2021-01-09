@@ -255,6 +255,7 @@ void * vm_acquire(size_t size, int options)
 		addr = base32 + addrOffset;
 		ret_code = vm_allocate(mach_task_self(), (vm_address_t *)&addr, 
 				       size, VM_FLAGS_FIXED | VM_FLAGS_OVERWRITE);
+		printf("ret code = %d\n", (int)ret_code);
 		if(ret_code == KERN_SUCCESS) {
 			last_alloc = addr;
 			base32 = base32 + size;

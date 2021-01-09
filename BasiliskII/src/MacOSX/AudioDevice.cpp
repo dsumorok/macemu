@@ -40,6 +40,8 @@
 	
 =============================================================================*/
 
+#include <AssertMacros.h>
+
 #include "AudioDevice.h"
 
 void	AudioDevice::Init(AudioDeviceID devid, bool isInput)
@@ -51,23 +53,48 @@ void	AudioDevice::Init(AudioDeviceID devid, bool isInput)
 	UInt32 propsize;
 	
 	propsize = sizeof(UInt32);
-	verify_noerr(AudioDeviceGetProperty(mID, 0, mIsInput, kAudioDevicePropertySafetyOffset, &propsize, &mSafetyOffset));
+	if(AudioDeviceGetProperty(mID, 0, mIsInput,
+                                  kAudioDevicePropertySafetyOffset,
+                                  &propsize, &mSafetyOffset) != noErr)
+        {
+                return;
+        }
 	
 	propsize = sizeof(UInt32);
-	verify_noerr(AudioDeviceGetProperty(mID, 0, mIsInput, kAudioDevicePropertyBufferFrameSize, &propsize, &mBufferSizeFrames));
+	if(AudioDeviceGetProperty(mID, 0, mIsInput,
+                                  kAudioDevicePropertyBufferFrameSize,
+                                  &propsize, &mBufferSizeFrames) != noErr)
+        {
+                return;
+        }
 	
 	propsize = sizeof(AudioStreamBasicDescription);
-	verify_noerr(AudioDeviceGetProperty(mID, 0, mIsInput, kAudioDevicePropertyStreamFormat, &propsize, &mFormat));
+	if(AudioDeviceGetProperty(mID, 0, mIsInput,
+                                  kAudioDevicePropertyStreamFormat,
+                                  &propsize, &mFormat) != noErr)
+        {
+                return;
+        }
 
 }
 
 void	AudioDevice::SetBufferSize(UInt32 size)
 {
 	UInt32 propsize = sizeof(UInt32);
-	verify_noerr(AudioDeviceSetProperty(mID, NULL, 0, mIsInput, kAudioDevicePropertyBufferFrameSize, propsize, &size));
+	if(AudioDeviceSetProperty(mID, NULL, 0, mIsInput,
+                                  kAudioDevicePropertyBufferFrameSize,
+                                  propsize, &size) != noErr)
+        {
+                return;
+        }
 
 	propsize = sizeof(UInt32);
-	verify_noerr(AudioDeviceGetProperty(mID, 0, mIsInput, kAudioDevicePropertyBufferFrameSize, &propsize, &mBufferSizeFrames));
+	if(AudioDeviceGetProperty(mID, 0, mIsInput,
+                                  kAudioDevicePropertyBufferFrameSize,
+                                  &propsize, &mBufferSizeFrames) != noErr)
+        {
+                return;
+        }
 }
 
 int		AudioDevice::CountChannels()
@@ -92,6 +119,11 @@ int		AudioDevice::CountChannels()
 
 char *	AudioDevice::GetName(char *buf, UInt32 maxlen)
 {
-	verify_noerr(AudioDeviceGetProperty(mID, 0, mIsInput, kAudioDevicePropertyDeviceName, &maxlen, buf));
+	if(AudioDeviceGetProperty(mID, 0, mIsInput,
+                                  kAudioDevicePropertyDeviceName, &maxlen, buf) != noErr)
+        {
+                return NULL;
+        }
+
 	return buf;
 }
